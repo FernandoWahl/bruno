@@ -8,6 +8,10 @@
 
 ## Introduction
 
+FORKED REPOSITORY FROM THE ORIGINAL REPO. 
+Updates:
+1. Support search using `like` for mysql
+
 A Laravel base controller class and a trait that will enable to add filtering, sorting, eager loading and pagination to your
 resource URLs.
 
