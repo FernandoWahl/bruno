@@ -5,6 +5,7 @@ namespace Optimus\Bruno;
 use DB;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Config;
 use InvalidArgumentException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
@@ -84,6 +85,8 @@ trait EloquentBuilderTrait
         // $value, $not, $key, $operator
         extract($filter);
 
+        $dbType = Config::get('database.default');
+
         $table = $query->getModel()->getTable();
 
         if ($value === 'null' || $value === '') {
@@ -105,8 +108,18 @@ trait EloquentBuilderTrait
                         'sw' => $value.'%' // starts with
                     ];
 
-                    $databaseField = DB::raw(sprintf('CAST(%s.%s AS TEXT)', $table, $key));
-                    $clauseOperator = $not ? 'NOT ILIKE' : 'ILIKE';
+                    $castToText = 'TEXT';
+                    $clauseOperator = $not ? 'NOT LIKE' : 'LIKE';
+
+                    if ($dbType === 'postgres') {
+                        $clauseOperator = $not ? 'NOT ILIKE' : 'ILIKE';
+                    }
+
+                    if ($dbType === 'mysql') {
+                        $castToText = 'CHAR';
+                    }
+
+                    $databaseField = DB::raw(sprintf('CAST(%s.%s AS ' . $castToText . ')', $table, $key));
                     $value = $valueString[$operator];
                     break;
                 case 'eq':
