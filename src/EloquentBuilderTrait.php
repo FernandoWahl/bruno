@@ -232,7 +232,7 @@ trait EloquentBuilderTrait
                     $relation->getRelated()->getTable(),
                     $model->getTable().'.'.$relation->getForeignKey(),
                     '=',
-                    $relation->getRelated()->getTable().'.'.$relation->getOtherKey(),
+                    $relation->getRelated()->getTable().'.'.$relation->getOwnerKey(),
                     $type
                 );
             } elseif ($relation instanceof BelongsToMany) {
