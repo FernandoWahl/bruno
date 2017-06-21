@@ -240,14 +240,14 @@ trait EloquentBuilderTrait
                     $relation->getTable(),
                     $relation->getQualifiedParentKeyName(),
                     '=',
-                    $relation->getForeignKey(),
+                    $relation->getQualifiedForeignKeyName(),
                     $type
                 );
                 $query->join(
                     $relation->getRelated()->getTable(),
                     $relation->getRelated()->getTable().'.'.$relation->getRelated()->getKeyName(),
                     '=',
-                    $relation->getOtherKey(),
+                    $relation->getQualifiedRelatedKeyName(),
                     $type
                 );
             } else {
